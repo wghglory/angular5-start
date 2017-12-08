@@ -46,8 +46,8 @@
             <td>{{ product.price | currency:'USD':true:'1.2-2'}}</td>
             <td>
               <!-- child component needs rating prop @Input, ratingClicked emitter @Output -->
-              <pm-star [rating]='product.starRating' (ratingClicked)='onRatingClicked($event)'>
-              </pm-star>
+              <app-star [rating]='product.starRating' (ratingClicked)='onRatingClicked($event)'>
+              </app-star>
             </td>
           </tr>
         </tbody>
