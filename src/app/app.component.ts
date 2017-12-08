@@ -10,6 +10,7 @@ import { Component } from '@angular/core';
                 <ul class='nav navbar-nav'>
                     <li><a [routerLink]="['/welcome']">Home</a></li>
                     <li><a [routerLink]="['/products']">Product List</a></li>
+                    <li><a routerLink="/customer">Customer</a></li>
                 </ul>
             </div>
         </nav>
