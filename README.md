@@ -132,16 +132,29 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
     项目会很快创建完成，接下来你会看到 `Installing packages for tooling via npm`。这里如果你选这了淘宝的cnmp镜像，应该最好在安装完全局Angular cli后设置一下，保证正常下载工具。`ng set --global packageManager cnpm`
 
-1. 在项目中引入 bootstrap 和 jQuery
+1. 在项目中引入 bootstrap 3.3.7 和 jQuery
 
     ```bash
     cnpm install bootstrap --save
     cnpm install jquery --save
+
+    yarn add bootstrap
     ```
 
     然后我们需要操作 `.angular-cli.json` 文件，把 bootstrap 和 jQuery 添加进去:
 
+    如果使用cnpm：
+
     ![img](http://images2015.cnblogs.com/blog/1140602/201705/1140602-20170521135435088-196815303.png)
+
+    使用 yarn 或者 npm：
+
+    ```json
+    "styles": [
+      "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+      "styles.css"
+    ],
+    ```
 
     > 因为 angular 用的是微软开发的 typescript，我们需要在终端做下面的操作，以便让 typescript 认识 bootstrap 和 jQuery 一些字符（比如jQuery的$）：
 

@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+/* if not adding bootstrap in angular-cli.json, we can add it below */
+/* @import '~bootstrap/dist/css/bootstrap.min.css'; */
 
 li {
   font-size: large;
