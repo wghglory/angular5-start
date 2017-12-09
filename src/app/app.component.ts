@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
                     <li><a [routerLink]="['/welcome']">Home</a></li>
                     <li><a [routerLink]="['/products']">Product List</a></li>
                     <li><a routerLink="/customer-template-driven">Customer-Template-Driven</a></li>
+                    <li><a routerLink="/customer-reactive">Customer-Reactive</a></li>
                 </ul>
             </div>
         </nav>
