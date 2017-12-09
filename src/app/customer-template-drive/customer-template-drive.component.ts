@@ -3,14 +3,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { Customer } from './customer';
+import { Customer } from './customer-template-drive';
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.css']
+  templateUrl: './customer-template-drive.component.html',
+  styleUrls: ['./customer-template-drive.component.css']
 })
-export class CustomerComponent implements OnInit {
+export class CustomerTemplateDrivenComponent implements OnInit {
   constructor() {}
 
   customer = new Customer();

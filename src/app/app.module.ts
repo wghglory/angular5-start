@@ -7,10 +7,10 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { WelcomeComponent } from './home/welcome.component';
 import { ProductModule } from './products/product.module';
-import { CustomerComponent } from './customer/customer.component';
+import { CustomerTemplateDrivenComponent } from './customer-template-drive/customer-template-drive.component';
 
 @NgModule({
-  declarations: [AppComponent, WelcomeComponent, CustomerComponent],
+  declarations: [AppComponent, WelcomeComponent, CustomerTemplateDrivenComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -18,7 +18,7 @@ import { CustomerComponent } from './customer/customer.component';
     // order matters
     RouterModule.forRoot([
       { path: 'welcome', component: WelcomeComponent },
-      { path: 'customer', component: CustomerComponent },
+      { path: 'customer-template-driven', component: CustomerTemplateDrivenComponent },
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       { path: '**', redirectTo: 'welcome', pathMatch: 'full' }
     ]),
