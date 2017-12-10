@@ -2,6 +2,7 @@
 
 * [validation](./docs/validation.md)
 * [react to changes](./docs/react_to_changes.md)
+* [duplicate input element.md](./docs/duplicate_form_element.md.md)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.2.
 

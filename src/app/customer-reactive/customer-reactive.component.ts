@@ -7,7 +7,8 @@ import {
   FormBuilder,
   Validators,
   AbstractControl,
-  ValidatorFn
+  ValidatorFn,
+  FormArray
 } from '@angular/forms';
 
 import { Customer } from './customer-reactive';
@@ -41,6 +42,10 @@ function ratingRange(min: number, max: number): ValidatorFn {
 })
 export class CustomerReactiveComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
+
+  get addresses(): FormArray {
+    return <FormArray>this.customerForm.get('addresses');
+  }
 
   emailMessage: string;
 
@@ -96,6 +101,21 @@ export class CustomerReactiveComponent implements OnInit {
     }
   }
 
+  addAddress(): void {
+    this.addresses.push(this.buildAddress());
+  }
+
+  buildAddress(): FormGroup {
+    return this.fb.group({
+      addressType: 'home',
+      street1: '',
+      street2: '',
+      city: '',
+      state: '',
+      zip: ''
+    });
+  }
+
   ngOnInit() {
     // this.customerForm = new FormGroup({
     //   firstName: new FormControl(),
@@ -122,7 +142,8 @@ export class CustomerReactiveComponent implements OnInit {
       notification: 'email',
       rating: ['', ratingRange(1, 5)],
       // sendCatalog: [{ value: true, disabled: false }]
-      sendCatalog: true
+      sendCatalog: true,
+      addresses: this.fb.array([this.buildAddress()])
     });
 
     this.customerForm
