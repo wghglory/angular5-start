@@ -5,12 +5,14 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
 
 import { IProduct } from './product';
 
 @Injectable()
 export class ProductService {
-  private baseUrl = './api/products/products.json';
+  // private baseUrl = './api/products/products.json';
+  private baseUrl = 'api/products';
 
   constructor(private _http: HttpClient) {}
 
@@ -65,7 +67,9 @@ export class ProductService {
   }
 
   private extractData(response: any) {
+    console.log(response);
     let body = response.json();
+    console.log(body);
     return body.data || {};
   }
 
