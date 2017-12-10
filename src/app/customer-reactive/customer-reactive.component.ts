@@ -1,4 +1,4 @@
-// template-drive form
+// reactive form
 
 import { Component, OnInit } from '@angular/core';
 import {
@@ -11,6 +11,8 @@ import {
 } from '@angular/forms';
 
 import { Customer } from './customer-reactive';
+
+import 'rxjs/add/operator/debounceTime';
 
 function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
   let emailControl = c.get('email');
@@ -39,6 +41,14 @@ function ratingRange(min: number, max: number): ValidatorFn {
 })
 export class CustomerReactiveComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
+
+  emailMessage: string;
+
+  private validationMessages = {
+    required: 'Please enter your email address.',
+    pattern: 'Please enter a valid email address.',
+    minlength: 'Please enter at least 4 characters.'
+  };
 
   customerForm: FormGroup;
 
@@ -77,6 +87,15 @@ export class CustomerReactiveComponent implements OnInit {
     phoneControl.updateValueAndValidity(); // must called. It's like a commit of previous validators set/clear methods
   }
 
+  setMessage(c: AbstractControl): void {
+    this.emailMessage = '';
+    if ((c.touched || c.dirty) && c.invalid) {
+      this.emailMessage = Object.keys(c.errors)
+        .map((key) => this.validationMessages[key])
+        .join(' ');
+    }
+  }
+
   ngOnInit() {
     // this.customerForm = new FormGroup({
     //   firstName: new FormControl(),
@@ -105,5 +124,14 @@ export class CustomerReactiveComponent implements OnInit {
       // sendCatalog: [{ value: true, disabled: false }]
       sendCatalog: true
     });
+
+    this.customerForm
+      .get('notification')
+      .valueChanges.subscribe((value) => this.setNotification(value));
+
+    const emailControl = this.customerForm.get('emailGroup.email');
+    emailControl.valueChanges
+      .debounceTime(1000)
+      .subscribe((value) => this.setMessage(emailControl));
   }
 }
