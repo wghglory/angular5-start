@@ -29,15 +29,17 @@
             <th>Available</th>
             <th>Price</th>
             <th>5 Star Rating</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor='let product of filteredProducts'>
             <td>
-              <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName' [style.width.px]='imageWidth' [style.margin.px]='imageMargin'>
+              <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName' [style.width.px]='imageWidth'
+                [style.margin.px]='imageMargin'>
             </td>
             <td>
-              <a [routerLink]="['/products', product.productId]">
+              <a [routerLink]="['/products', product.id]">
                 {{ product.productName }}
               </a>
             </td>
@@ -48,6 +50,11 @@
               <!-- child component needs rating prop @Input, ratingClicked emitter @Output -->
               <app-star [rating]='product.starRating' (ratingClicked)='onRatingClicked($event)'>
               </app-star>
+            </td>
+            <td>
+              <a class="btn btn-primary" [routerLink]="['/productEdit', product.id]">
+                Edit
+              </a>
             </td>
           </tr>
         </tbody>
