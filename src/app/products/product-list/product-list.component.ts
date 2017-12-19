@@ -8,11 +8,14 @@ import { ProductService } from '../product.service';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-  pageTitle: string = 'Product List';
-  imageWidth: number = 50;
-  imageMargin: number = 2;
-  showImage: boolean = false;
+  pageTitle = 'Product List';
+  imageWidth = 50;
+  imageMargin = 2;
+  showImage = false;
   errorMessage: string;
+
+  filteredProducts: IProduct[];
+  products: IProduct[] = [];
 
   // way 1: using ngModel, getter and setter to filter products
   // _listFilter: string;
@@ -31,8 +34,6 @@ export class ProductListComponent implements OnInit {
     this.filteredProducts = val ? this.performFilter(val) : this.products;
   }
 
-  filteredProducts: IProduct[];
-  products: IProduct[] = [];
 
   constructor(private _productService: ProductService) {}
 
