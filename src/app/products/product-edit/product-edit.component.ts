@@ -35,7 +35,7 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements: ElementRef[];
 
-  pageTitle: string = 'Product Edit';
+  pageTitle = 'Product Edit';
   errorMessage: string;
   productForm: FormGroup;
 
@@ -89,7 +89,7 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Read the product Id from the route parameter
     this.sub = this.route.params.subscribe((params) => {
-      let id = +params['id'];
+      const id = +params['id'];
       this.getProduct(id);
     });
   }
@@ -100,7 +100,7 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     // Watch for the blur event from any input element on the form.
-    let controlBlurs: Observable<any>[] = this.formInputElements.map((formControl: ElementRef) =>
+    const controlBlurs: Observable<any>[] = this.formInputElements.map((formControl: ElementRef) =>
       Observable.fromEvent(formControl.nativeElement, 'blur')
     );
 
@@ -163,7 +163,7 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
   saveProduct(): void {
     if (this.productForm.dirty && this.productForm.valid) {
       // Copy the form values over the product object values
-      let p = Object.assign({}, this.product, this.productForm.value);
+      const p = Object.assign({}, this.product, this.productForm.value);
 
       this.productService
         .saveProduct(p)

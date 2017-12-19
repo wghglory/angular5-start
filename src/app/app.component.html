@@ -1,7 +1,41 @@
-<!--The whole content below can be removed with the new code.-->
-<div style="text-align:center">
-  <h1>
-    TaDa! Welcome to {{title}}!!
-  </h1>
-  ... Starter Files ...
+<div>
+  <nav class='navbar navbar-default'>
+    <div class='container-fluid'>
+      <a class='navbar-brand'>{{pageTitle}}</a>
+      <ul class='nav navbar-nav'>
+        <li>
+          <a [routerLink]="['/welcome']">Home</a>
+        </li>
+        <li>
+          <a [routerLink]="['/products']">Product List</a>
+        </li>
+        <li>
+          <a [routerLink]="['/productEdit/0']">Add Product</a>
+        </li>
+        <li>
+          <a routerLink="/customer-template-driven">Customer-Template-Driven</a>
+        </li>
+        <li>
+          <a routerLink="/customer-reactive">Customer-Reactive</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li *ngIf="authService.isLoggedIn()">
+          <a>Welcome {{ authService.currentUser.userName }}</a>
+        </li>
+        <li>
+          <a>Show Messages</a>
+        </li>
+        <li *ngIf="!authService.isLoggedIn()">
+          <a>Log In</a>
+        </li>
+        <li *ngIf="authService.isLoggedIn()">
+          <a (click)="logOut()">Log Out</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class='container'>
+    <router-outlet></router-outlet>
+  </div>
 </div>

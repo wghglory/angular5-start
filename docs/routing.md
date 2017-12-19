@@ -1,17 +1,78 @@
 # Routing
 
-- Routing Basics
-- Routing to Features
-- Route Parameters
-- Prefetching Data using Route Resolvers
-- Child Routes
-- Grouping and Component-less Routes
-- Styling, Animating, and Watching Routes
-- Secondary (Auxiliary) Routes
-- Route Guards
-- Lazy Loading
+* Routing Basics
+* Routing to Features
+* Route Parameters
+* Prefetching Data using Route Resolvers
+* Child Routes
+* Grouping and Component-less Routes
+* Styling, Animating, and Watching Routes
+* Secondary (Auxiliary) Routes
+* Route Guards
+* Lazy Loading
 
-![](http://om1o84p1p.bkt.clouddn.com/1513672144.png?imageMogr2/thumbnail/!70p)
+![routing structure](http://om1o84p1p.bkt.clouddn.com/1513672144.png?imageMogr2/thumbnail/!70p)
+
+## Setting up Routing
+
+1. Define base path
+
+    ```html
+    used in development:
+    <base href="/">
+    http://localhost:3000
+
+    used in production:
+      ng build --base-href /hello/
+      ng build --bh /hello/
+    <base href="/hello">
+    http://www.mysite.com/hello
+    ```
+
+1. Import Router
+
+    * `RouterModule.forRoot()`: Registers the router service. Used once for the application
+    * `RouterModule.forChild()`: Does NOT register the router service. Used in feature modules
+
+    below shows how to use Root Router:
+
+    ```diff
+    // app.module.ts
+    + import { RouterModule } from '@angular/router';
+
+    @NgModule({
+      imports: [
+        BrowserModule,
+    +   RouterModule.forRoot([])  // one time only!
+      ],
+      declarations: [
+        // ...
+      ],
+      bootstrap: [ AppComponent ]
+    })
+    export class AppModule { }
+    ```
+
+1. Configure routes
+
+    ```ts
+    [
+      { path: 'home', component: WelcomeComponent },
+      { path: 'welcome', redirectTo: 'home', pathMatch: 'full' },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },  // default route
+      { path: '**', component: PageNotFoundComponent }  // wildcard route
+    ]
+    ```
+
+1. Place template and Activate routes by `routerLink`
+
+    ```html
+    <ul class='nav navbar-nav'>
+      <li><a [routerLink]="['/welcome']">Home</a></li>
+      <li><a routerLink='/products'>Product List</a></li>
+    </ul>
+    <router-outlet></router-outlet>
+    ```
 
 ## Routing basic demo
 
@@ -34,7 +95,7 @@ import { VehicleListComponent } from './vehicles/vehicle-list.component';
 import { VehicleComponent } from './vehicles/vehicle.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'characters', },
+  { path: '', pathMatch: 'full', redirectTo: 'characters' },
   { path: 'characters', component: CharacterListComponent },
   { path: 'characters/:id', component: CharacterComponent },
   { path: 'vehicles', component: VehicleListComponent },
@@ -78,7 +139,7 @@ const routes: Routes = [
     children: [
       { path: '', component: PageNotFoundComponent },
       { path: 'email', component: EmailComponent },
-   ]
+    ]
   }
 ];
 ```

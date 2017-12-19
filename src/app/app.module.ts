@@ -6,16 +6,22 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { WelcomeComponent } from './home/welcome.component';
-import { ProductModule } from './products/product.module';
 import { CustomerTemplateDrivenComponent } from './customer-template-drive/customer-template-drive.component';
 import { CustomerReactiveComponent } from './customer-reactive/customer-reactive.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+
+/* feature modules */
+import { ProductModule } from './products/product.module';
+import { UserModule } from './user/user.module';
+import { MessageModule } from './message/message.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomeComponent,
     CustomerTemplateDrivenComponent,
-    CustomerReactiveComponent
+    CustomerReactiveComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,10 +34,12 @@ import { CustomerReactiveComponent } from './customer-reactive/customer-reactive
       { path: 'customer-template-driven', component: CustomerTemplateDrivenComponent },
       { path: 'customer-reactive', component: CustomerReactiveComponent },
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
-      { path: '**', redirectTo: 'welcome', pathMatch: 'full' }
+      { path: '**', component: PageNotFoundComponent },
     ]),
-    // order matters
-    ProductModule
+    // order matters, must after RouterModule.forRoot
+    ProductModule,
+    UserModule,
+    MessageModule,
   ],
   bootstrap: [AppComponent]
 })
