@@ -31,7 +31,7 @@ import { ProductEditComponent } from './product-edit/product-edit.component';
     ]),
     SharedModule,
     ReactiveFormsModule,
-    HttpClientInMemoryWebApiModule.forRoot(ProductData) // must after HttpClientModule
+    HttpClientInMemoryWebApiModule.forRoot(ProductData, { delay: 1000 }) // must after HttpClientModule
   ],
   declarations: [
     ProductListComponent,
