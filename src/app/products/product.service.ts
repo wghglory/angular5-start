@@ -68,8 +68,7 @@ export class ProductService {
 
   private extractData(response: any) {
     console.log(response);
-    let body = response.json();
-    console.log(body);
+    const body = response.json();
     return body.data || {};
   }
 
