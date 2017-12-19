@@ -4,7 +4,7 @@ import {
   AfterViewInit,
   OnDestroy,
   ViewChildren,
-  ElementRef
+  ElementRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -12,7 +12,7 @@ import {
   FormControl,
   FormArray,
   Validators,
-  FormControlName
+  FormControlName,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -24,12 +24,13 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { IProduct } from '../product';
 import { ProductService } from '../product.service';
+import { MessageService } from './../../message/message.service';
 
 import { NumberValidators } from '../../shared/validator.number';
 import { GenericValidator } from '../../shared/validator.generic';
 
 @Component({
-  templateUrl: './product-edit.component.html'
+  templateUrl: './product-edit.component.html',
 })
 export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef })
@@ -47,15 +48,16 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
 
-  get tags(): FormArray {
+  get tags (): FormArray {
     return <FormArray>this.productForm.get('tags');
   }
 
-  constructor(
+  constructor (
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private productService: ProductService
+    private productService: ProductService,
+    private messageService: MessageService,
   ) {
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
@@ -63,14 +65,14 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
       productName: {
         required: 'Product name is required.',
         minlength: 'Product name must be at least three characters.',
-        maxlength: 'Product name cannot exceed 50 characters.'
+        maxlength: 'Product name cannot exceed 50 characters.',
       },
       productCode: {
-        required: 'Product code is required.'
+        required: 'Product code is required.',
       },
       starRating: {
-        range: 'Rate the product between 1 (lowest) and 5 (highest).'
-      }
+        range: 'Rate the product between 1 (lowest) and 5 (highest).',
+      },
     };
 
     // Define an instance of the validator for use with this form,
@@ -78,13 +80,13 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
-  ngOnInit(): void {
+  ngOnInit (): void {
     this.productForm = this.fb.group({
       productName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       productCode: ['', Validators.required],
       starRating: ['', NumberValidators.range(1, 5)],
       tags: this.fb.array([]),
-      description: ''
+      description: '',
     });
 
     // Read the product Id from the route parameter
@@ -94,14 +96,14 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy (): void {
     this.sub.unsubscribe();
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit (): void {
     // Watch for the blur event from any input element on the form.
     const controlBlurs: Observable<any>[] = this.formInputElements.map((formControl: ElementRef) =>
-      Observable.fromEvent(formControl.nativeElement, 'blur')
+      Observable.fromEvent(formControl.nativeElement, 'blur'),
     );
 
     // Merge the blur event observable with the valueChanges observable
@@ -112,20 +114,20 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  addTag(): void {
+  addTag (): void {
     this.tags.push(new FormControl());
   }
 
-  getProduct(id: number): void {
+  getProduct (id: number): void {
     this.productService
       .getProduct(id)
       .subscribe(
         (product: IProduct) => this.onProductRetrieved(product),
-        (error: any) => (this.errorMessage = <any>error)
+        (error: any) => (this.errorMessage = <any>error),
       );
   }
 
-  onProductRetrieved(product: IProduct): void {
+  onProductRetrieved (product: IProduct): void {
     if (this.productForm) {
       this.productForm.reset();
     }
@@ -142,12 +144,12 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
       productName: this.product.productName,
       productCode: this.product.productCode,
       starRating: this.product.starRating,
-      description: this.product.description
+      description: this.product.description,
     });
     this.productForm.setControl('tags', this.fb.array(this.product.tags || []));
   }
 
-  deleteProduct(): void {
+  deleteProduct (): void {
     if (this.product.id === 0) {
       // Don't delete, it was never saved.
       this.onSaveComplete();
@@ -155,27 +157,38 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
       if (confirm(`Really delete the product: ${this.product.productName}?`)) {
         this.productService
           .deleteProduct(this.product.id)
-          .subscribe(() => this.onSaveComplete(), (error: any) => (this.errorMessage = <any>error));
+          .subscribe(
+            () => this.onSaveComplete(`${this.product.productName} was deleted`),
+            (error: any) => (this.errorMessage = <any>error),
+          );
       }
     }
   }
 
-  saveProduct(): void {
+  saveProduct (): void {
     if (this.productForm.dirty && this.productForm.valid) {
       // Copy the form values over the product object values
       const p = Object.assign({}, this.product, this.productForm.value);
 
       this.productService
         .saveProduct(p)
-        .subscribe(() => this.onSaveComplete(), (error: any) => (this.errorMessage = <any>error));
+        .subscribe(
+          () => this.onSaveComplete(`${this.product.productName} was saved`),
+          (error: any) => (this.errorMessage = <any>error),
+        );
     } else if (!this.productForm.dirty) {
       this.onSaveComplete();
     }
   }
 
-  onSaveComplete(): void {
+  onSaveComplete (message?: string): void {
     // Reset the form to clear the flags
     this.productForm.reset();
+
+    if (message) {
+      this.messageService.addMessage(message);
+    }
+
     this.router.navigate(['/products']);
   }
 }

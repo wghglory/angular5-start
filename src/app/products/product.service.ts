@@ -14,9 +14,9 @@ export class ProductService {
   // private baseUrl = './api/products/products.json';
   private baseUrl = 'api/products';
 
-  constructor(private _http: HttpClient) {}
+  constructor (private _http: HttpClient) {}
 
-  getProducts(): Observable<IProduct[]> {
+  getProducts (): Observable<IProduct[]> {
     return (
       this._http
         .get<IProduct[]>(this.baseUrl)
@@ -25,12 +25,19 @@ export class ProductService {
     );
   }
 
-  getProduct(id: number): Observable<IProduct> {
-    return this.getProducts().map((products: IProduct[]) => products.find((p) => p.id === id));
+  getProduct (id: number): Observable<IProduct> {
+    if (id === 0) {
+      return Observable.of(this.initializeProduct());
+    }
+    const url = `${this.baseUrl}/${id}`;
+    return this._http
+      .get(url)
+      // .do((data) => console.log('getProduct: ' + JSON.stringify(data)))
+      .catch(this.handleError);
   }
 
-  deleteProduct(id: number): Observable<Response> {
-    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  deleteProduct (id: number): Observable<Response> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     const url = `${this.baseUrl}/${id}`;
     return this._http
@@ -39,8 +46,8 @@ export class ProductService {
       .catch(this.handleError);
   }
 
-  saveProduct(product: IProduct): Observable<IProduct> {
-    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  saveProduct (product: IProduct): Observable<IProduct> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     if (product.id === 0) {
       return this.createProduct(product, { headers: headers });
@@ -48,7 +55,7 @@ export class ProductService {
     return this.updateProduct(product, { headers: headers });
   }
 
-  private createProduct(product: IProduct, options: any): Observable<IProduct> {
+  private createProduct (product: IProduct, options: any): Observable<IProduct> {
     product.id = undefined;
     return this._http
       .post(this.baseUrl, product, options)
@@ -57,7 +64,7 @@ export class ProductService {
       .catch(this.handleError);
   }
 
-  private updateProduct(product: IProduct, options: any): Observable<IProduct> {
+  private updateProduct (product: IProduct, options: any): Observable<IProduct> {
     const url = `${this.baseUrl}/${product.id}`;
     return this._http
       .put(url, product, options)
@@ -66,28 +73,28 @@ export class ProductService {
       .catch(this.handleError);
   }
 
-  private extractData(response: any) {
+  private extractData (response: any) {
     console.log(response);
     const body = response.json();
     return body.data || {};
   }
 
-  initializeProduct(): IProduct {
+  initializeProduct (): IProduct {
     // Return an initialized object
     return {
       id: 0,
       productName: null,
       productCode: null,
-      tags: [''],
+      tags: [],
       releaseDate: null,
       price: null,
       description: null,
       starRating: null,
-      imageUrl: null
+      imageUrl: null,
     };
   }
 
-  private handleError(err: HttpErrorResponse) {
+  private handleError (err: HttpErrorResponse) {
     // in a real world app, we may send the server to some remote logging infrastructure
     // instead of just logging it to the console
     let errorMessage = '';

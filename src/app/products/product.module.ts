@@ -24,7 +24,7 @@ import { ProductEditComponent } from './product-edit/product-edit.component';
         component: ProductDetailComponent
       },
       {
-        path: 'productEdit/:id',
+        path: 'products/:id/edit',
         canDeactivate: [ProductEditGuard],
         component: ProductEditComponent
       }

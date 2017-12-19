@@ -74,6 +74,80 @@
     <router-outlet></router-outlet>
     ```
 
+## Routing to feature modules
+
+![routing to feature modules](http://om1o84p1p.bkt.clouddn.com/1513686661.png?imageMogr2/thumbnail/!70p)
+
+### Setting up for Feature Routing
+
+**Route Path Naming Strategies**：
+
+```js
+productList: products
+productDetail: products/:id
+productEdit: products/:id/edit
+```
+
+> feature module must be included in app.module, above app-routing.module
+
+1. Import Router (product feature module)
+
+    ```diff
+    + import { RouterModule } from '@angular/router';
+    // ...
+    @NgModule({
+      imports: [
+        SharedModule,
+    +   RouterModule.forChild([
+    +     { path: 'products', component: ProductListComponent },
+    +     {
+    +       path: 'products/:id',
+    +       canActivate: [ProductDetailGuard],
+    +       component: ProductDetailComponent
+    +     },
+    +     {
+    +       path: 'products/:id/edit',
+    +       canDeactivate: [ProductEditGuard],
+    +       component: ProductEditComponent
+    +     }
+    +   ]),
+      ],
+      declarations: [
+        ProductListComponent,
+      ],
+    })
+    export class ProductModule { }
+    ```
+
+1. Activate routes
+
+    ```ts
+    this.router.navigate(['/welcome']);       // Standard syntax
+    this.router.navigate('/welcome'); // Short-cut syntax
+    this.router.navigateByUrl('/welcome');    // Complete Url path
+    ```
+
+    ```text
+    http://localhost:3000/products(popup:messages)  // current route
+    http://localhost:3000/welcome(popup:messages)   // navigate()
+    http://localhost:3000/welcome                   // navigateByUrl()
+    ```
+
+    ```diff
+    + import { Router } from '@angular/router'; ...
+
+    @Component({...})
+    export class AppComponent {
+
+      constructor(private router: Router) { }
+
+      logOut(): void {
+        // Do some processing
+    +    this.router.navigate(['/welcome']);
+      }
+    }
+    ```
+
 ## Routing basic demo
 
 创建项目时候自动创建 app-routing module，并引入到了 app.module:

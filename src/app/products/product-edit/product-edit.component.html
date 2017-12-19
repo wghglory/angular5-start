@@ -12,7 +12,7 @@
           <div class="col-md-8">
             <input class="form-control" id="productNameId" type="text" placeholder="Name (required)"
               formControlName="productName" />
-            <span class="help-block" *ngIf="displayMessage.productName">
+            <span class="help-block" *ngIf=displayMessage.productName>
               {{displayMessage.productName}}
             </span>
           </div>
@@ -24,7 +24,7 @@
           <div class="col-md-8">
             <input class="form-control" id="productCodeId" type="text" placeholder="Code (required)"
               formControlName="productCode" />
-            <span class="help-block" *ngIf="displayMessage.productCode">
+            <span class="help-block" *ngIf=displayMessage.productCode>
               {{displayMessage.productCode}}
             </span>
           </div>
@@ -36,7 +36,7 @@
           <div class="col-md-8">
             <input class="form-control" id="starRatingId" type="text" placeholder="Rating" formControlName="starRating"
             />
-            <span class="help-block" *ngIf="displayMessage.starRating">
+            <span class="help-block" *ngIf=displayMessage.starRating>
               {{displayMessage.starRating}}
             </span>
           </div>
@@ -91,7 +91,7 @@
         </div>
       </fieldset>
     </form>
-    <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
+    <div class="has-error" *ngIf=errorMessage>{{errorMessage}}</div>
   </div>
 
 </div>

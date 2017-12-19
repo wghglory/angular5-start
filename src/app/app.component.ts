@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 
 import { AuthService } from './user/auth.service';
@@ -9,10 +10,10 @@ import { AuthService } from './user/auth.service';
 export class AppComponent {
   pageTitle = 'Product Management';
 
-  constructor (private authService: AuthService) {}
+  constructor (public authService: AuthService, private router: Router) {}
 
   logOut (): void {
     this.authService.logout();
-    console.log('Log out');
+    this.router.navigateByUrl('/welcome');
   }
 }
