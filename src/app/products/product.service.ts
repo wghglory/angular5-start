@@ -31,9 +31,9 @@ export class ProductService {
     }
     const url = `${this.baseUrl}/${id}`;
     return this._http
-      .get(url)
-      // .do((data) => console.log('getProduct: ' + JSON.stringify(data)))
-      .catch(this.handleError);
+        .get(url)
+        // .do((data) => console.log('getProduct: ' + JSON.stringify(data)))
+        .catch(this.handleError);
   }
 
   deleteProduct (id: number): Observable<Response> {
@@ -59,7 +59,6 @@ export class ProductService {
     product.id = undefined;
     return this._http
       .post(this.baseUrl, product, options)
-      .map(this.extractData)
       .do((data) => console.log('createProduct: ' + JSON.stringify(data)))
       .catch(this.handleError);
   }
@@ -68,15 +67,8 @@ export class ProductService {
     const url = `${this.baseUrl}/${product.id}`;
     return this._http
       .put(url, product, options)
-      .map(() => product)
       .do((data) => console.log('updateProduct: ' + JSON.stringify(data)))
       .catch(this.handleError);
-  }
-
-  private extractData (response: any) {
-    console.log(response);
-    const body = response.json();
-    return body.data || {};
   }
 
   initializeProduct (): IProduct {
