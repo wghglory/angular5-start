@@ -80,6 +80,7 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
+  /* regular, calling service after load
   ngOnInit (): void {
     this.productForm = this.fb.group({
       productName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -100,6 +101,30 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+  getProduct (id: number): void {
+    this.productService
+      .getProduct(id)
+      .subscribe(
+        (product: IProduct) => this.onProductRetrieved(product),
+        (error: any) => (this.errorMessage = <any>error),
+      );
+  }
+  */
+
+  ngOnInit (): void {
+    this.productForm = this.fb.group({
+      productName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      productCode: ['', Validators.required],
+      starRating: ['', NumberValidators.range(1, 5)],
+      tags: this.fb.array([]),
+      description: '',
+    });
+
+    this.route.data.subscribe((data) => {
+      this.onProductRetrieved(data['product']);
+    });
+  }
+
   ngAfterViewInit (): void {
     // Watch for the blur event from any input element on the form.
     const controlBlurs: Observable<any>[] = this.formInputElements.map((formControl: ElementRef) =>
@@ -116,15 +141,6 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addTag (): void {
     this.tags.push(new FormControl());
-  }
-
-  getProduct (id: number): void {
-    this.productService
-      .getProduct(id)
-      .subscribe(
-        (product: IProduct) => this.onProductRetrieved(product),
-        (error: any) => (this.errorMessage = <any>error),
-      );
   }
 
   onProductRetrieved (product: IProduct): void {

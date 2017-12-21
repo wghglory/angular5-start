@@ -6,19 +6,20 @@ import { ProductService } from '../product.service';
 
 @Component({
   templateUrl: './product-detail.component.html',
-  styleUrls: ['./product-detail.component.css']
+  styleUrls: ['./product-detail.component.css'],
 })
 export class ProductDetailComponent implements OnInit {
   pageTitle = 'Product Detail';
   errorMessage: string;
   product: IProduct;
 
-  constructor(
+  constructor (
     private _route: ActivatedRoute,
     private _router: Router,
-    private _productService: ProductService
+    private _productService: ProductService,
   ) {}
 
+  /* Regular, using service
   ngOnInit() {
     const param = this._route.snapshot.paramMap.get('id');
     if (param) {
@@ -34,6 +35,11 @@ export class ProductDetailComponent implements OnInit {
         (product) => (this.product = product),
         (error) => (this.errorMessage = <any>error)
       );
+  } */
+
+  /* Using Resolver to prefetch data */
+  ngOnInit (): void {
+    this.product = this._route.snapshot.data['product'];
   }
 
   // onBack(): void {

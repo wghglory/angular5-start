@@ -10,6 +10,8 @@ import { SharedModule } from './../shared/shared.module';
 import { ProductDetailGuard, ProductEditGuard } from './product-guard.service';
 import { ProductService } from './product.service';
 
+import { ProductResolver } from './product-resolver.service';
+
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductEditComponent } from './product-edit/product-edit.component';
@@ -21,24 +23,26 @@ import { ProductEditComponent } from './product-edit/product-edit.component';
       {
         path: 'products/:id',
         canActivate: [ProductDetailGuard],
-        component: ProductDetailComponent
+        component: ProductDetailComponent,
+        resolve: { product: ProductResolver },
       },
       {
         path: 'products/:id/edit',
         canDeactivate: [ProductEditGuard],
-        component: ProductEditComponent
-      }
+        component: ProductEditComponent,
+        resolve: { product: ProductResolver },
+      },
     ]),
     SharedModule,
     ReactiveFormsModule,
-    HttpClientInMemoryWebApiModule.forRoot(ProductData, { delay: 1000 }) // must after HttpClientModule
+    HttpClientInMemoryWebApiModule.forRoot(ProductData, { delay: 1000 }), // must after HttpClientModule
   ],
   declarations: [
     ProductListComponent,
     ProductDetailComponent,
     ProductEditComponent,
-    ConvertToSpacesPipe
+    ConvertToSpacesPipe,
   ],
-  providers: [ProductService, ProductDetailGuard, ProductEditGuard]
+  providers: [ProductService, ProductDetailGuard, ProductEditGuard, ProductResolver],
 })
 export class ProductModule {}

@@ -3,7 +3,7 @@
 * Routing Basics
 * Routing to Features
 * Route Parameters
-* Prefetching Data using Route Resolvers
+* [Prefetching Data using Route Resolvers](./routing_prefetching_data.md)
 * Child Routes
 * Grouping and Component-less Routes
 * Styling, Animating, and Watching Routes

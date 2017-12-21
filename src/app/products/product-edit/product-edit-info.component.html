@@ -9,7 +9,7 @@
 
         <div class="col-md-8">
           <input class="form-control" id="productNameId" type="text" placeholder="Name (required)"
-            required minlength="3" [(ngModel)]=p roduct.productName name="productName"
+            required minlength="3" [(ngModel)]=product.productName name="productName"
             #productNameVar="ngModel" />
           <span class="help-block" *ngIf="(productNameVar.touched ||
                                           productNameVar.dirty || product.id !== 0) &&
