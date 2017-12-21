@@ -13,7 +13,7 @@
 
 ![routing structure](http://om1o84p1p.bkt.clouddn.com/1513672144.png?imageMogr2/thumbnail/!70p)
 
-## Setting up Routing
+## Setting up base/main Routing
 
 1. Define base path
 
@@ -56,12 +56,89 @@
 1. Configure routes
 
     ```ts
+    // app.module.ts
     [
       { path: 'home', component: WelcomeComponent },
       { path: 'welcome', redirectTo: 'home', pathMatch: 'full' },
       { path: '', redirectTo: 'home', pathMatch: 'full' },  // default route
       { path: '**', component: PageNotFoundComponent }  // wildcard route
     ]
+    ```
+
+1. It's better to create app-routing.module.ts
+
+    ```ts
+    import { NgModule } from '@angular/core';
+    import { RouterModule } from '@angular/router';
+
+    import { AppComponent } from './app.component';
+    import { WelcomeComponent } from './home/welcome.component';
+    import { CustomerTemplateDrivenComponent } from './customer-template-drive/customer-template-drive.component';
+    import { CustomerReactiveComponent } from './customer-reactive/customer-reactive.component';
+    import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+
+    @NgModule({
+      imports: [
+        // order matters
+        RouterModule.forRoot([
+          { path: 'welcome', component: WelcomeComponent },
+          { path: 'customer-template-driven', component: CustomerTemplateDrivenComponent },
+          { path: 'customer-reactive', component: CustomerReactiveComponent },
+          { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+          { path: '**', component: PageNotFoundComponent },
+        ]),
+      ],
+      exports: [RouterModule],
+    })
+    export class AppRoutingModule {}
+    ```
+
+    Then app.module.ts:
+
+    ```diff
+    import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+    import { BrowserModule } from '@angular/platform-browser';
+    import { NgModule } from '@angular/core';
+    import { HttpClientModule } from '@angular/common/http';
+
+    import { AppComponent } from './app.component';
+    import { WelcomeComponent } from './home/welcome.component';
+    import { CustomerTemplateDrivenComponent } from './customer-template-drive/customer-template-drive.component';
+    import { CustomerReactiveComponent } from './customer-reactive/customer-reactive.component';
+    import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+
+    /* app routing module */
+    import { AppRoutingModule } from './app-routing.module';
+
+    /* feature modules */
+    import { ProductModule } from './products/product.module';
+    import { UserModule } from './user/user.module';
+    import { MessageModule } from './message/message.module';
+
+    @NgModule({
+      declarations: [
+        AppComponent,
+        WelcomeComponent,
+        CustomerTemplateDrivenComponent,
+        CustomerReactiveComponent,
+        PageNotFoundComponent,
+      ],
+      imports: [
+        BrowserModule,
+        FormsModule, // template-driven
+        ReactiveFormsModule, // reactive
+        HttpClientModule,
+
+    +    // order matters, must after RouterModule.forRoot
+    +    ProductModule,
+    +    UserModule,
+    +    MessageModule,
+    +    // must at last
+    +    AppRoutingModule,
+      ],
+      bootstrap: [AppComponent],
+    })
+    export class AppModule {}
     ```
 
 1. Place template and Activate routes by `routerLink`
@@ -78,7 +155,7 @@
 
 ![routing to feature modules](http://om1o84p1p.bkt.clouddn.com/1513686661.png?imageMogr2/thumbnail/!70p)
 
-### Setting up for Feature Routing
+### Setting up for Feature Module Routing and Route Parameters
 
 **Route Path Naming Strategies**：
 
@@ -125,12 +202,22 @@ productEdit: products/:id/edit
     this.router.navigate(['/welcome']);       // Standard syntax
     this.router.navigate('/welcome'); // Short-cut syntax
     this.router.navigateByUrl('/welcome');    // Complete Url path
+    this.router.navigate(['/products', this.product.id]);  // with parameter
     ```
 
     ```text
     http://localhost:3000/products(popup:messages)  // current route
     http://localhost:3000/welcome(popup:messages)   // navigate()
     http://localhost:3000/welcome                   // navigateByUrl()
+    ```
+
+    template:
+
+    ```html
+    <a [routerLink]="['/products', product.id]">{{product.productName}}</a>
+    <a [routerLink]="['/products', product.id, 'edit']">Edit</a>
+    <a [routerLink]="['/products', 0, 'edit']">Add Product</a>
+    <a routerLink="/products/0/edit">Add Product</a>
     ```
 
     ```diff
@@ -147,6 +234,170 @@ productEdit: products/:id/edit
       }
     }
     ```
+
+### Reading Route Parameters
+
+**Observable** and **Snapshot** are 2 ways to read parameters using **ActivatedRoute** service.
+
+**ActivatedRoute Service**:
+
+* Url segments
+* Route parameters
+* Query parameters
+* Resolver data
+
+#### Snapshot -- read parameters only once
+
+We're on ProductList page. When we click the Product Name link, we will navigate to ProductDetail page.
+
+_Angular Module_:
+
+```javascript
+{ path: 'products/:id', component: ProductDetailComponent }
+```
+
+_Template_:
+
+```html
+<a [routerLink]="['/products', product.id]">{{product.productName}}</a>
+```
+
+_Component Class_:
+
+```ts
+constructor(private route: ActivatedRoute) {
+  // Snapshot for initial parameter value
+  let id = this.route.snapshot.paramMap.get('id');
+}
+```
+
+#### Observable -- watch parameter changes
+
+In ProductDetail page, if we click the "Edit" button, the url changes, we need watch this change and navigate to ProductEdit page.
+
+_Angular Module_:
+
+```javascript
+{ path: 'products/:id/edit', component: ProductEditComponent }
+```
+
+_Template_:
+
+```html
+<a [routerLink]="['/products', product.id, 'edit']">Edit</a>
+```
+
+_Component Class_:
+
+```ts
+constructor(private route: ActivatedRoute) {
+  // Observable if parameter changes later
+  this.route.paramMap.subscribe(
+    params => {
+      let id = params.get('id');
+    }
+  );
+}
+```
+
+### Required and Optional Parameters
+
+_Required_:
+
+```html
+[routerLink]="['/products', productName, productCode, availabilityStart, availabilityEnd]"
+<!-- http://localhost:3000/products/apple/gmg/March%201%2C%202015/March%201%2C%202017 -->
+```
+
+```javascript
+// Module:
+{ path: 'products/:name/:code/:startDate/:endDate', component: ProductListComponent }
+```
+
+_Optional_: **Frequently used for search criteria to filter data**
+
+```html
+[routerLink]="['/products', {name: productName, code: productCode, startDate: availabilityStart, endDate: availabilityEnd}]"
+<!-- http://localhost:3000/products;name=apple;code=gmg;startDate=March%201%2C%202015;endDate=March%201%2C%202017 -->
+```
+
+```javascript
+// Module:
+{ path: 'products', component: ProductListComponent }
+```
+
+#### Reading Optional Route Parameters
+
+```ts
+import { ActivatedRoute } from '@angular/router';
+
+constructor(private route: ActivatedRoute) {
+  console.log(this.route.snapshot.paramMap('name'));
+  console.log(this.route.snapshot.paramMap('code'));
+}
+```
+
+### Query Parameter
+
+<http://localhost:3000/products/5?filterBy=er&showImage=true>
+
+_Template_:
+
+```html
+<a [routerLink] = "['/products', product.id]"
+  [queryParams] = "{ filterBy: 'er', showImage: true }">
+  {{product.productName}}
+</a>
+```
+
+_Component_:
+
+```ts
+this.router.navigate(['/products'],
+  {
+    queryParams: { filterBy: 'er', showImage: true }
+  }
+);
+```
+
+_Angular Module_:
+
+```ts
+{ path: 'products', component: ProductListComponent }
+```
+
+#### Retaining Query Parameter
+
+```html
+<a [routerLink] = "['/products']"
+  queryParamsHandling = "preserve">
+  Back
+</a>
+```
+
+```ts
+this.router.navigate(['/products'],
+  { queryParamsHandling: 'preserve' }
+);
+```
+
+#### Reading Query Parameter
+
+```ts
+import { ActivatedRoute } from '@angular/router';
+
+constructor(private route: ActivatedRoute) {
+  console.log(this.route.snapshot.queryParams['filterBy']);
+  console.log(this.route.snapshot.queryParams['showImage']);
+}
+```
+
+```html
+<a [routerLink] = "['/products', product.id]"
+  [queryParams] = "{ filterBy: listFilter, showImage: showImage }">
+  {{product.productName}}
+</a>
+```
 
 ## Routing basic demo
 

@@ -45,10 +45,15 @@
   </div>
 
   <div class='panel-footer'>
-    <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+    <a class='btn btn-default' style='width:80px'
+      routerLink='/products'
+      queryParamsHandling = "preserve">
+      <!-- (click)='onBack()'  -->
       <i class='glyphicon glyphicon-chevron-left'></i> Back
     </a>
-    <a class="btn btn-primary" style="width:80px;margin-left:10px">
+    <a class="btn btn-primary" style="width:80px;margin-left:10px"
+      [routerLink]="['/products', product.id, 'edit']"
+    >
       Edit
     </a>
   </div>

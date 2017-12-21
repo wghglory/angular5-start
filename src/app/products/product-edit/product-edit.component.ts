@@ -90,8 +90,8 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     // Read the product Id from the route parameter
-    this.sub = this.route.params.subscribe((params) => {
-      const id = +params['id'];
+    this.sub = this.route.paramMap.subscribe((params) => {
+      const id = +params.get('id');
       this.getProduct(id);
     });
   }
