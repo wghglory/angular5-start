@@ -97,11 +97,13 @@
 
   <div class="panel-body" *ngIf="product">
     <div class="wizard">
-      <a [routerLink]="['info']">
+      <a [routerLink]="['info']" routerLinkActive="active">
         Basic Information
+        <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('info')}"></span>
       </a>
-      <a [routerLink]="['tags']">
+      <a [routerLink]="['tags']" routerLinkActive="active">
         Search Tags
+        <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('tags')}"></span>
       </a>
     </div>
 
