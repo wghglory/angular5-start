@@ -15,6 +15,8 @@ import { ProductResolver } from './product-resolver.service';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductEditComponent } from './product-edit/product-edit.component';
+import { ProductEditTagsComponent } from './product-edit/product-edit-tags.component';
+import { ProductEditInfoComponent } from './product-edit/product-edit-info.component';
 
 @NgModule({
   imports: [
@@ -31,6 +33,21 @@ import { ProductEditComponent } from './product-edit/product-edit.component';
         canDeactivate: [ProductEditGuard],
         component: ProductEditComponent,
         resolve: { product: ProductResolver },
+        children: [
+          {
+            path: '',
+            redirectTo: 'info',
+            pathMatch: 'full',
+          },
+          {
+            path: 'info',
+            component: ProductEditInfoComponent,
+          },
+          {
+            path: 'tags',
+            component: ProductEditTagsComponent,
+          },
+        ],
       },
     ]),
     SharedModule,
@@ -41,6 +58,8 @@ import { ProductEditComponent } from './product-edit/product-edit.component';
     ProductListComponent,
     ProductDetailComponent,
     ProductEditComponent,
+    ProductEditInfoComponent,
+    ProductEditTagsComponent,
     ConvertToSpacesPipe,
   ],
   providers: [ProductService, ProductDetailGuard, ProductEditGuard, ProductResolver],

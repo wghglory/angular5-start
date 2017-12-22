@@ -77,6 +77,7 @@ export class ProductService {
       id: 0,
       productName: null,
       productCode: null,
+      category: null,
       tags: [],
       releaseDate: null,
       price: null,

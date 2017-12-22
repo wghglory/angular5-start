@@ -1,9 +1,9 @@
-import { InMemoryDbService } from 'angular-in-memory-web-api';
+import { InMemoryDbService, InMemoryBackendConfig } from 'angular-in-memory-web-api';
 
 import { IProduct } from './product';
 
-export class ProductData implements InMemoryDbService {
-  createDb() {
+export class ProductData implements InMemoryDbService, InMemoryBackendConfig {
+  createDb () {
     const products: IProduct[] = [
       {
         id: 1,
@@ -14,28 +14,19 @@ export class ProductData implements InMemoryDbService {
         price: 19.95,
         starRating: 3.2,
         imageUrl: 'http://openclipart.org/image/300px/svg_to_png/26215/Anonymous_Leaf_Rake.png',
-        tags: ['rake', 'leaf', 'yard', 'home']
+        category: 'Garden',
+        tags: ['rake', 'leaf', 'yard', 'home'],
       },
       {
         id: 2,
-        productName: 'Mike Basketball',
-        productCode: 'GDN-0041',
-        releaseDate: 'April 07, 2018',
-        description: 'Guanghui likes it',
-        price: 199,
-        starRating: 5,
-        imageUrl: 'http://openclipart.org/image/300px/svg_to_png/26215/Anonymous_Leaf_Rake.png',
-        tags: ['basketball', 'home']
-      },
-      {
-        id: 3,
         productName: 'Garden Cart',
         productCode: 'GDN-0023',
         releaseDate: 'March 18, 2016',
         description: '15 gallon capacity rolling garden cart',
         price: 32.99,
         starRating: 4.2,
-        imageUrl: 'http://openclipart.org/image/300px/svg_to_png/58471/garden_cart.png'
+        imageUrl: 'http://openclipart.org/image/300px/svg_to_png/58471/garden_cart.png',
+        category: 'Garden',
       },
       {
         id: 5,
@@ -46,7 +37,8 @@ export class ProductData implements InMemoryDbService {
         price: 8.9,
         starRating: 4.8,
         imageUrl: 'http://openclipart.org/image/300px/svg_to_png/73/rejon_Hammer.png',
-        tags: ['tools', 'hammer', 'construction']
+        category: 'Toolbox',
+        tags: ['tools', 'hammer', 'construction'],
       },
       {
         id: 8,
@@ -56,7 +48,8 @@ export class ProductData implements InMemoryDbService {
         description: '15-inch steel blade hand saw',
         price: 11.55,
         starRating: 3.7,
-        imageUrl: 'http://openclipart.org/image/300px/svg_to_png/27070/egore911_saw.png'
+        imageUrl: 'http://openclipart.org/image/300px/svg_to_png/27070/egore911_saw.png',
+        category: 'Toolbox',
       },
       {
         id: 10,
@@ -66,9 +59,12 @@ export class ProductData implements InMemoryDbService {
         description: 'Standard two-button video game controller',
         price: 35.95,
         starRating: 4.6,
-        imageUrl: 'http://openclipart.org/image/300px/svg_to_png/120337/xbox-controller_01.png'
-      }
+        imageUrl: 'http://openclipart.org/image/300px/svg_to_png/120337/xbox-controller_01.png',
+        category: 'Gaming',
+      },
     ];
-    return { products };
+    return {
+      products,
+    };
   }
 }

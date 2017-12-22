@@ -31,8 +31,9 @@ import { GenericValidator } from '../../shared/validator.generic';
 
 @Component({
   templateUrl: './product-edit.component.html',
+  styleUrls: ['./product-edit.component.css'],
 })
-export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ProductEditComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements: ElementRef[];
 
@@ -80,7 +81,9 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
-  /* regular, calling service after load
+  private dataIsValid: { [key: string]: boolean } = {};
+
+  /* regular, calling service after load. Not using a route resolver
   ngOnInit (): void {
     this.productForm = this.fb.group({
       productName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -182,18 +185,30 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   saveProduct (): void {
-    if (this.productForm.dirty && this.productForm.valid) {
-      // Copy the form values over the product object values
-      const p = Object.assign({}, this.product, this.productForm.value);
+    // // if using reactive form
+    // if (this.productForm.dirty && this.productForm.valid) {
+    //   // Copy the form values over the product object values
+    //   const p = Object.assign({}, this.product, this.productForm.value);
 
+    //   this.productService
+    //     .saveProduct(p)
+    //     .subscribe(
+    //       () => this.onSaveComplete(`${this.product.productName} was saved`),
+    //       (error: any) => (this.errorMessage = <any>error),
+    //     );
+    // } else if (!this.productForm.dirty) {
+    //   this.onSaveComplete();
+    // }
+
+    if (this.isValid(null)) {
       this.productService
-        .saveProduct(p)
+        .saveProduct(this.product)
         .subscribe(
           () => this.onSaveComplete(`${this.product.productName} was saved`),
           (error: any) => (this.errorMessage = <any>error),
         );
-    } else if (!this.productForm.dirty) {
-      this.onSaveComplete();
+    } else {
+      this.errorMessage = 'Please correct the validation errors.';
     }
   }
 
@@ -206,5 +221,38 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.router.navigate(['/products']);
+  }
+
+  isValid (path: string): boolean {
+    this.validate();
+    if (path) {
+      return this.dataIsValid[path];
+    }
+    return (
+      this.dataIsValid && Object.keys(this.dataIsValid).every((d) => this.dataIsValid[d] === true)
+    );
+  }
+
+  validate (): void {
+    // Clear the validation object
+    this.dataIsValid = {};
+
+    // 'info' tab
+    if (
+      this.product.productName &&
+      this.product.productName.length >= 3 &&
+      this.product.productCode
+    ) {
+      this.dataIsValid['info'] = true;
+    } else {
+      this.dataIsValid['info'] = false;
+    }
+
+    // 'tags' tab
+    if (this.product.category && this.product.category.length >= 3) {
+      this.dataIsValid['tags'] = true;
+    } else {
+      this.dataIsValid['tags'] = false;
+    }
   }
 }

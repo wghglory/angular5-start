@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IProduct } from '../product';
 
 @Component({
-  templateUrl: './app/products/product-edit-tags.component.html',
+  templateUrl: './product-edit-tags.component.html',
 })
 export class ProductEditTagsComponent implements OnInit {
   errorMessage: string;
@@ -13,7 +13,12 @@ export class ProductEditTagsComponent implements OnInit {
 
   constructor (private route: ActivatedRoute) {}
 
-  ngOnInit (): void {}
+  ngOnInit (): void {
+    // load data from parent router
+    this.route.parent.data.subscribe((data) => {
+      this.product = data['product'];
+    });
+  }
 
   // Add the defined tags
   addTags (): void {
