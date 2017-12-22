@@ -9,6 +9,7 @@ import {
 import { Component } from '@angular/core';
 
 import { AuthService } from './user/auth.service';
+import { MessageService } from './message/message.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,11 @@ export class AppComponent {
   pageTitle = 'Product Management';
   loading = true;
 
-  constructor (public authService: AuthService, private router: Router) {
+  constructor (
+    public authService: AuthService,
+    private router: Router,
+    private messageService: MessageService,
+  ) {
     router.events.subscribe((routerEvent: Event) => {
       this.checkRouterEvent(routerEvent);
     });
@@ -36,6 +41,16 @@ export class AppComponent {
     ) {
       this.loading = false;
     }
+  }
+
+  displayMessages (): void {
+    this.router.navigate([{ outlets: { popup: ['messages'] } }]);
+    this.messageService.isDisplayed = true;
+  }
+
+  hideMessages (): void {
+    this.router.navigate([{ outlets: { popup: null } }]);
+    this.messageService.isDisplayed = false;
   }
 
   logOut (): void {

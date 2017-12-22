@@ -17,6 +17,16 @@
 
 ![](http://om1o84p1p.bkt.clouddn.com/1513947480.png?imageMogr2/thumbnail/!70p)
 
+## Secondary Routes: Named RouterOutlet
+
+```html
+<!-- app.component.html -->
+<div class="container">
+  <router-outlet></router-outlet>  <!-- main route -->
+  <router-outlet name='popup'></router-outlet>
+</div>
+```
+
 ## Configuring secondary routes
 
 ```ts
@@ -44,7 +54,7 @@ Template:
   { outlets: { popup: ['summary', product.id] } }]">Messages</a>
 ```
 
-Component Class:
+Component Class (app.component.ts, template calls displayMessages and hideMessages):
 
 ```ts
 this.router.navigate([{ outlets: { popup: ['messages'] } }]);
@@ -75,6 +85,8 @@ Clear a secondary route using an object and setting its outlets property
 * Key: Outlet name
 * Value: null
 
+When closing the message component, we need to clear outlets.
+
 Template:
 
 ```html
@@ -86,13 +98,4 @@ Component Class:
 ```ts
 this.router.navigate([{ outlets: { popup: null } }]);
 this.router.navigateByUrl('/login');
-```
-
-## Secondary Routes: Named RouterOutlet
-
-```html
-<div class="container">
-  <router-outlet></router-outlet>
-  <router-outlet name='popup'></router-outlet>
-</div>
 ```

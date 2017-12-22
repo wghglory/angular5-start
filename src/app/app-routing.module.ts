@@ -21,6 +21,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
       { enableTracing: true },
     ),
   ],
-  exports: [RouterModule],
+  exports: [ RouterModule ],
 })
 export class AppRoutingModule {}
