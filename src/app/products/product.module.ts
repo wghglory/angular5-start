@@ -21,31 +21,39 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info.compo
 @NgModule({
   imports: [
     RouterModule.forChild([
-      { path: 'products', component: ProductListComponent },
       {
-        path: 'products/:id',
-        canActivate: [ProductDetailGuard],
-        component: ProductDetailComponent,
-        resolve: { product: ProductResolver },
-      },
-      {
-        path: 'products/:id/edit',
-        canDeactivate: [ProductEditGuard],
-        component: ProductEditComponent,
-        resolve: { product: ProductResolver },
+        path: 'products',
         children: [
           {
             path: '',
-            redirectTo: 'info',
-            pathMatch: 'full',
+            component: ProductListComponent,
           },
           {
-            path: 'info',
-            component: ProductEditInfoComponent,
+            path: ':id',
+            canActivate: [ProductDetailGuard],
+            component: ProductDetailComponent,
+            resolve: { product: ProductResolver },
           },
           {
-            path: 'tags',
-            component: ProductEditTagsComponent,
+            path: ':id/edit',
+            canDeactivate: [ProductEditGuard],
+            component: ProductEditComponent,
+            resolve: { product: ProductResolver },
+            children: [
+              {
+                path: '',
+                redirectTo: 'info',
+                pathMatch: 'full',
+              },
+              {
+                path: 'info',
+                component: ProductEditInfoComponent,
+              },
+              {
+                path: 'tags',
+                component: ProductEditTagsComponent,
+              },
+            ],
           },
         ],
       },
