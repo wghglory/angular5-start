@@ -1,3 +1,4 @@
+import { AuthGuard } from './../user/auth-guard.service';
 import { ProductData } from './product-data';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -23,6 +24,7 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info.compo
     RouterModule.forChild([
       {
         path: 'products',
+        canActivate: [ AuthGuard ],
         children: [
           {
             path: '',
@@ -30,13 +32,13 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info.compo
           },
           {
             path: ':id',
-            canActivate: [ProductDetailGuard],
+            canActivate: [ ProductDetailGuard ],
             component: ProductDetailComponent,
             resolve: { product: ProductResolver },
           },
           {
             path: ':id/edit',
-            canDeactivate: [ProductEditGuard],
+            canDeactivate: [ ProductEditGuard ],
             component: ProductEditComponent,
             resolve: { product: ProductResolver },
             children: [
@@ -70,6 +72,6 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info.compo
     ProductEditTagsComponent,
     ConvertToSpacesPipe,
   ],
-  providers: [ProductService, ProductDetailGuard, ProductEditGuard, ProductResolver],
+  providers: [ ProductService, ProductDetailGuard, ProductEditGuard, ProductResolver ],
 })
 export class ProductModule {}

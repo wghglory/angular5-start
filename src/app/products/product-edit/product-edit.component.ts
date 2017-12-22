@@ -31,7 +31,7 @@ import { GenericValidator } from '../../shared/validator.generic';
 
 @Component({
   templateUrl: './product-edit.component.html',
-  styleUrls: ['./product-edit.component.css'],
+  styleUrls: [ './product-edit.component.css' ],
 })
 export class ProductEditComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef })
@@ -41,7 +41,6 @@ export class ProductEditComponent implements OnInit, AfterViewInit {
   errorMessage: string;
   productForm: FormGroup;
 
-  product: IProduct;
   private sub: Subscription;
 
   // Use with the generic validation message class
@@ -82,6 +81,21 @@ export class ProductEditComponent implements OnInit, AfterViewInit {
   }
 
   private dataIsValid: { [key: string]: boolean } = {};
+  private currentProduct: IProduct;
+  private originalProduct: IProduct;
+
+  get product (): IProduct {
+    return this.currentProduct;
+  }
+  set product (value: IProduct) {
+    this.currentProduct = value;
+    // Clone the object to retain a copy
+    this.originalProduct = Object.assign({}, value);
+  }
+
+  get isDirty (): boolean {
+    return JSON.stringify(this.originalProduct) !== JSON.stringify(this.currentProduct);
+  }
 
   /* regular, calling service after load. Not using a route resolver
   ngOnInit (): void {
@@ -116,9 +130,12 @@ export class ProductEditComponent implements OnInit, AfterViewInit {
 
   ngOnInit (): void {
     this.productForm = this.fb.group({
-      productName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      productCode: ['', Validators.required],
-      starRating: ['', NumberValidators.range(1, 5)],
+      productName: [
+        '',
+        [ Validators.required, Validators.minLength(3), Validators.maxLength(50) ],
+      ],
+      productCode: [ '', Validators.required ],
+      starRating: [ '', NumberValidators.range(1, 5) ],
       tags: this.fb.array([]),
       description: '',
     });
@@ -220,7 +237,7 @@ export class ProductEditComponent implements OnInit, AfterViewInit {
       this.messageService.addMessage(message);
     }
 
-    this.router.navigate(['/products']);
+    this.router.navigate([ '/products' ]);
   }
 
   isValid (path: string): boolean {
