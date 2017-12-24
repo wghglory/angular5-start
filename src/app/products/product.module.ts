@@ -21,48 +21,75 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info.compo
 
 @NgModule({
   imports: [
+    // // normal
+    // RouterModule.forChild([
+    //   {
+    //     path: 'products',
+    //     canActivate: [ AuthGuard ],
+    //     children: [
+    //       {
+    //         path: '',
+    //         component: ProductListComponent,
+    //       },
+    //       {
+    //         path: ':id',
+    //         canActivate: [ ProductDetailGuard ],
+    //         component: ProductDetailComponent,
+    //         resolve: { product: ProductResolver },
+    //       },
+    //       {
+    //         path: ':id/edit',
+    //         canDeactivate: [ ProductEditGuard ],
+    //         component: ProductEditComponent,
+    //         resolve: { product: ProductResolver },
+    //         children: [
+    //           {
+    //             path: '',
+    //             redirectTo: 'info',
+    //             pathMatch: 'full',
+    //           },
+    //           {
+    //             path: 'info',
+    //             component: ProductEditInfoComponent,
+    //           },
+    //           {
+    //             path: 'tags',
+    //             component: ProductEditTagsComponent,
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   },
+    // ]),
+
+    // lazy loading
     RouterModule.forChild([
       {
-        path: 'products',
-        canActivate: [ AuthGuard ],
+        path: '',
+        component: ProductListComponent,
+      },
+      {
+        path: ':id',
+        component: ProductDetailComponent,
+        canActivate: [ ProductDetailGuard ],
+        resolve: { product: ProductResolver },
+      },
+      {
+        path: ':id/edit',
+        component: ProductEditComponent,
+        canDeactivate: [ ProductEditGuard ],
+        resolve: { product: ProductResolver },
         children: [
-          {
-            path: '',
-            component: ProductListComponent,
-          },
-          {
-            path: ':id',
-            canActivate: [ ProductDetailGuard ],
-            component: ProductDetailComponent,
-            resolve: { product: ProductResolver },
-          },
-          {
-            path: ':id/edit',
-            canDeactivate: [ ProductEditGuard ],
-            component: ProductEditComponent,
-            resolve: { product: ProductResolver },
-            children: [
-              {
-                path: '',
-                redirectTo: 'info',
-                pathMatch: 'full',
-              },
-              {
-                path: 'info',
-                component: ProductEditInfoComponent,
-              },
-              {
-                path: 'tags',
-                component: ProductEditTagsComponent,
-              },
-            ],
-          },
+          { path: '', redirectTo: 'info', pathMatch: 'full' },
+          { path: 'info', component: ProductEditInfoComponent },
+          { path: 'tags', component: ProductEditTagsComponent },
         ],
       },
     ]),
     SharedModule,
     ReactiveFormsModule,
-    HttpClientInMemoryWebApiModule.forRoot(ProductData, { delay: 1000 }), // must after HttpClientModule
+    // HttpClientInMemoryWebApiModule.forRoot(ProductData, { delay: 1000 }),
+    // this must be after HttpClientModule  // moved to app-routing because of lazy loading
   ],
   declarations: [
     ProductListComponent,

@@ -13,9 +13,13 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AppRoutingModule } from './app-routing.module';
 
 /* feature modules */
-import { ProductModule } from './products/product.module';
+// import { ProductModule } from './products/product.module';  // to lazy load
 import { UserModule } from './user/user.module';
 import { MessageModule } from './message/message.module';
+
+// Imports for loading & configuring the in-memory web api
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { ProductData } from './products/product-data';
 
 @NgModule({
   declarations: [
@@ -32,12 +36,13 @@ import { MessageModule } from './message/message.module';
     HttpClientModule,
 
     // order matters, must after RouterModule.forRoot
-    ProductModule,
+    // ProductModule,  to lazy load, so move data here below
+    InMemoryWebApiModule.forRoot(ProductData, { delay: 1000 }),
     UserModule,
     MessageModule,
     // must at last
     AppRoutingModule,
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [ AppComponent ],
 })
 export class AppModule {}

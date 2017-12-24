@@ -4,12 +4,12 @@
 * Routing to Features
 * Route Parameters
 * [Prefetching Data using Route Resolvers](./routing_prefetching_data.md)
-* Child Routes
-* Grouping and Component-less Routes
-* Styling, Animating, and Watching Routes
-* Secondary (Auxiliary) Routes
-* Route Guards
-* Lazy Loading
+* [Child Routes](./routing_child_routes.md)
+* [Grouping and Component-less Routes](./routing_grouping_and_componentLess_route.md)
+* [Styling, Animating, and Watching Routes](./routing_styling.md)
+* [Secondary (Auxiliary) Routes](./routing_2ndRoutes.md)
+* [Route Guards](./routing_guard.md)
+* [Lazy Loading](./routing_lazyload.md)
 
 ![routing structure](http://om1o84p1p.bkt.clouddn.com/1513672144.png?imageMogr2/thumbnail/!70p)
 
