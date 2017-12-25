@@ -1,5 +1,5 @@
 export class Customer {
-  constructor(
+  constructor (
     public firstName = '',
     public lastName = '',
     public email = '',
@@ -9,6 +9,6 @@ export class Customer {
     public street2?: string,
     public city?: string,
     public state = '',
-    public zip?: string
+    public zip?: string,
   ) {}
 }

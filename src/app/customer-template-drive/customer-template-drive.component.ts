@@ -7,17 +7,17 @@ import { Customer } from './customer-template-drive';
 
 @Component({
   templateUrl: './customer-template-drive.component.html',
-  styleUrls: ['./customer-template-drive.component.css']
+  styleUrls: [ './customer-template-drive.component.css' ],
 })
 export class CustomerTemplateDrivenComponent implements OnInit {
-  constructor() {}
+  constructor () {}
 
   customer = new Customer();
 
-  save(customerForm: NgForm) {
+  save (customerForm: NgForm) {
     console.log(customerForm.form);
     console.log('Saved: ' + JSON.stringify(customerForm.value));
   }
 
-  ngOnInit() {}
+  ngOnInit () {}
 }

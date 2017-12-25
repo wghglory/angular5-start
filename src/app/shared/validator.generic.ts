@@ -13,14 +13,14 @@ export class GenericValidator {
   //     validationRuleName1: 'Validation Message.',
   //     validationRuleName2: 'Validation Message.'
   // }
-  constructor(private validationMessages: { [key: string]: { [key: string]: string } }) {}
+  constructor (private validationMessages: { [key: string]: { [key: string]: string } }) {}
 
   // Processes each control within a FormGroup
   // And returns a set of validation messages to display
   // Structure
   // controlName1: 'Validation Message.',
   // controlName2: 'Validation Message.'
-  processMessages(container: FormGroup): { [key: string]: string } {
+  processMessages (container: FormGroup): { [key: string]: string } {
     let messages = {};
     for (let controlKey in container.controls) {
       if (container.controls.hasOwnProperty(controlKey)) {

@@ -15,7 +15,7 @@ export class ProductData implements InMemoryDbService, InMemoryBackendConfig {
         starRating: 3.2,
         imageUrl: 'http://openclipart.org/image/300px/svg_to_png/26215/Anonymous_Leaf_Rake.png',
         category: 'Garden',
-        tags: ['rake', 'leaf', 'yard', 'home'],
+        tags: [ 'rake', 'leaf', 'yard', 'home' ],
       },
       {
         id: 2,
@@ -38,7 +38,7 @@ export class ProductData implements InMemoryDbService, InMemoryBackendConfig {
         starRating: 4.8,
         imageUrl: 'http://openclipart.org/image/300px/svg_to_png/73/rejon_Hammer.png',
         category: 'Toolbox',
-        tags: ['tools', 'hammer', 'construction'],
+        tags: [ 'tools', 'hammer', 'construction' ],
       },
       {
         id: 8,
