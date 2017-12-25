@@ -20,7 +20,8 @@ import { SelectiveStrategy } from './selective-strategy.service';
         {
           path: 'products',
           canActivate: [ AuthGuard ],
-          data: { preload: true },
+          // put this for the module that needs preload only
+          data: { preload: true }, // maybe some other module lazy loads: no need `data: { preload: true }`
           loadChildren: './products/product.module#ProductModule',
         },
         { path: 'customer-template-driven', component: CustomerTemplateDrivenComponent },
