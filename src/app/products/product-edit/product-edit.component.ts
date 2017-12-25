@@ -201,6 +201,12 @@ export class ProductEditComponent implements OnInit, AfterViewInit {
     }
   }
 
+  reset (): void {
+    this.dataIsValid = null;
+    this.currentProduct = null;
+    this.originalProduct = null;
+  }
+
   saveProduct (): void {
     // // if using reactive form
     // if (this.productForm.dirty && this.productForm.valid) {
@@ -232,6 +238,7 @@ export class ProductEditComponent implements OnInit, AfterViewInit {
   onSaveComplete (message?: string): void {
     // Reset the form to clear the flags
     this.productForm.reset();
+    this.reset();
 
     if (message) {
       this.messageService.addMessage(message);
